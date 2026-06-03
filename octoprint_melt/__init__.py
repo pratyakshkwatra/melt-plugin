@@ -12,6 +12,7 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
                  octoprint.plugin.StartupPlugin,
                  octoprint.plugin.EventHandlerPlugin,
                  octoprint.plugin.TemplatePlugin,
+                 octoprint.plugin.SettingsPlugin,
                  octoprint.plugin.AssetPlugin):
 
     def on_after_startup(self):
@@ -424,9 +425,15 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
     def is_api_protected(self):
         return True
 
+    def get_settings_defaults(self):
+        return dict(
+            enable_telemetry=True,
+            max_db_size_mb=50
+        )
+
     def get_template_configs(self):
         return [
-            dict(type="tab", name="Melt", custom_bindings=False)
+            dict(type="settings", custom_bindings=False)
         ]
 
     def get_assets(self):

@@ -1,12 +1,14 @@
 $(function() {
     function MeltViewModel(parameters) {
         var self = this;
-        // Logic for Melt Dashboard
+        self.settings = parameters[1];
+        
+        // Settings are automatically loaded and saved by OctoPrint's SettingsViewModel
     }
     
     OCTOPRINT_VIEWMODELS.push({
         construct: MeltViewModel,
         dependencies: ["loginStateViewModel", "settingsViewModel"],
-        elements: ["#tab_plugin_melt"]
+        elements: ["#settings_plugin_melt"]
     });
 });

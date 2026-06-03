@@ -1,0 +1,19 @@
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="enable_telemetry">Enable Telemetry Engine</label>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id="enable_telemetry" data-bind="checked: settings.plugins.melt.enable_telemetry">
+                Broadcast low-latency <code>msgpack</code> telemetry via WebSockets to Melt clients.
+            </label>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="max_db_size_mb">Max SQLite DB Size (MB)</label>
+        <div class="controls">
+            <input type="number" id="max_db_size_mb" class="input-mini text-right" data-bind="value: settings.plugins.melt.max_db_size_mb">
+            <span class="help-block">Limits the local metric database size on the Raspberry Pi to prevent storage exhaustion.</span>
+        </div>
+    </div>
+</form>
