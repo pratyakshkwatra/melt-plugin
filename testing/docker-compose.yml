@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  octoprint:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ..:/melt-plugin
+      # Mount octoprint config to persist virtual printer state if needed
+      - octoprint_data:/octoprint
+    environment:
+      - ENABLE_VIRTUAL_PRINTER=true
+    restart: unless-stopped
+
+volumes:
+  octoprint_data:
