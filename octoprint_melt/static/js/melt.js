@@ -18,18 +18,15 @@ $(function() {
 
         // Fetch initial state so it doesn't stay stuck when printer is idle
         self.onStartupComplete = function() {
-            $.ajax({
-                url: API_BASEURL + "plugin/melt/telemetry",
-                type: "GET",
-                success: function(response) {
+            OctoPrint.get(OctoPrint.getBlueprintUrl("melt") + "telemetry")
+                .done(function(response) {
                     if (response.status === "ok") {
                         self.statusText("Connected & Idle. Ready for high-throughput telemetry.");
                     }
-                },
-                error: function() {
+                })
+                .fail(function() {
                     self.statusText("Error: Cannot reach Melt backend API.");
-                }
-            });
+                });
         };
     }
     
