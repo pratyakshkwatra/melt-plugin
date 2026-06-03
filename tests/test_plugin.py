@@ -97,8 +97,9 @@ def test_inject_cancel_object(mock_get, plugin):
     plugin._printer.commands.assert_called_with(["M104 S0", "M140 S0", "G28 X Y"])
 
 
-from flask import Flask
+from flask import Flask  # noqa: E402
 app = Flask(__name__)
+
 
 @patch('octoprint_melt.jsonify')
 def test_toggle_plugin(mock_jsonify, plugin):
