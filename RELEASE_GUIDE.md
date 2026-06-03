@@ -32,11 +32,13 @@ Push your commits and your tags simultaneously to the remote repository.
 git push origin main --tags
 ```
 
-## Step 5: (Optional) Create a GitHub Release
-If you want to attach release notes or compiled binaries:
+## Step 5: Create a GitHub Release (REQUIRED)
+OctoPrint users install plugins via ZIP URLs. **You do NOT need to manually create a ZIP file**—GitHub automatically generates the correct source code `.zip` archive for you when you create a release!
+
 1. Go to your GitHub repository -> **Releases** -> **Draft a new release**.
 2. Select the `v0.1.4` tag you just pushed.
-3. Add your release notes and click **Publish**.
+3. **Add a Description**: You *must* add a detailed description/release notes outlining what changed (e.g., bug fixes, new features) so users know what they are updating to.
+4. Click **Publish release**.
 
-OctoPrint users can now safely install your plugin using the tagged archive URL:
+OctoPrint users can now safely install or update your plugin using the auto-generated ZIP URL:
 `https://github.com/pratyakshkwatra/melt-plugin/archive/refs/tags/v0.1.4.zip`
