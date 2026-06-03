@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup # flake8: noqa: E501
 
 setup(
     name="OctoPrint-Melt",
