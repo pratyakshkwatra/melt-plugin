@@ -31,6 +31,16 @@ This is the high-performance backend telemetry engine for the **Melt Flutter App
 
 ---
 
+## 🚀 Installation
+
+Install via the OctoPrint Plugin Manager or manually via pip. **You must use the `.zip` archive URL**, not the plain repository URL!
+
+```bash
+pip install "https://github.com/pratyakshkwatra/melt-plugin/archive/main.zip"
+```
+
+---
+
 ## 🛠️ Local Development & Linting
 
 To run local linting without installing the heavy `octoprint` core library:
