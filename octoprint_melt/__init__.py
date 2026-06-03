@@ -433,6 +433,7 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
 
     def get_template_configs(self):
         return [
+            dict(type="tab", name="Melt", custom_bindings=True),
             dict(type="settings", custom_bindings=False)
         ]
 

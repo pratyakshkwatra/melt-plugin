@@ -1,5 +1,2 @@
 /* Melt Dashboard CSS */
-#tab_plugin_melt {
-    background-color: #0F172A;
-    color: #06B6D4;
-}
+/* We intentionally leave this empty so it fully inherits the user's OctoPrint theme plugins natively */

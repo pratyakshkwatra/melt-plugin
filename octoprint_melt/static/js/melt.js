@@ -1,14 +1,26 @@
 $(function() {
     function MeltViewModel(parameters) {
         var self = this;
-        self.settings = parameters[1];
+        self.settings = parameters[0];
         
-        // Settings are automatically loaded and saved by OctoPrint's SettingsViewModel
+        // Observables for the Dashboard Tab
+        self.statusText = ko.observable("Waiting for telemetry...");
+        self.totalPrints = ko.observable(0);
+        self.failedPrints = ko.observable(0);
+        
+        self.onDataUpdaterPluginMessage = function(plugin, data) {
+            if (plugin !== "melt") {
+                return;
+            }
+            if (data.msgpack_payload) {
+                self.statusText("Receiving high-throughput telemetry...");
+            }
+        };
     }
     
     OCTOPRINT_VIEWMODELS.push({
         construct: MeltViewModel,
-        dependencies: ["loginStateViewModel", "settingsViewModel"],
-        elements: ["#settings_plugin_melt"]
+        dependencies: ["settingsViewModel"],
+        elements: ["#tab_plugin_melt", "#settings_plugin_melt"]
     });
 });
