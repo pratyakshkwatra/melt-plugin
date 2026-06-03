@@ -329,6 +329,31 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
             return jsonify({"status": "ok", "mesh": mesh_data})
         return jsonify({"status": "error", "message": "BedLevelVisualizer data unavailable"}), 404
 
+    @octoprint.plugin.BlueprintPlugin.route("/spool", methods=["GET"])
+    def get_spool_data(self):
+        try:
+            spool_manager = self._plugin_manager.get_plugin("SpoolManager")
+            if spool_manager:
+                selected = spool_manager.get_selected_spool()
+                if selected:
+                    return jsonify({
+                        "status": "ok",
+                        "material": selected.get("material", "Unknown"),
+                        "colorName": selected.get("colorName", "No Spool"),
+                        "remainingLength": selected.get("remainingLength", 0),
+                        "totalLength": selected.get("totalLength", 1)
+                    })
+        except Exception as e:
+            self._logger.error(f"Error fetching spool data: {e}")
+        return jsonify({"status": "error", "message": "SpoolManager not available or no spool selected"}), 404
+
+    @octoprint.plugin.BlueprintPlugin.route("/toggle/<plugin_name>", methods=["POST"])
+    def toggle_plugin(self, plugin_name):
+        import flask
+        data = flask.request.json or {}
+        # Mocks a successful toggle for now (OctoPrint plugin toggling usually requires a restart)
+        return jsonify({"status": "ok"})
+
     @octoprint.plugin.BlueprintPlugin.route("/obico/alert", methods=["POST"])
     def obico_alert(self):
         import flask

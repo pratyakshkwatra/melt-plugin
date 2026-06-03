@@ -7,6 +7,7 @@ mock_octo.plugin.BlueprintPlugin = type('BlueprintPlugin', (object,), {'route': 
 mock_octo.plugin.StartupPlugin = type('StartupPlugin', (object,), {})
 mock_octo.plugin.EventHandlerPlugin = type('EventHandlerPlugin', (object,), {})
 mock_octo.plugin.TemplatePlugin = type('TemplatePlugin', (object,), {})
+mock_octo.plugin.SettingsPlugin = type('SettingsPlugin', (object,), {})
 mock_octo.plugin.AssetPlugin = type('AssetPlugin', (object,), {})
 
 sys.modules['octoprint'] = mock_octo

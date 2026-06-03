@@ -13,7 +13,7 @@ $(function () {
     self.telemetryChart = null;
 
     self.onDataUpdaterPluginMessage = function (plugin, data) {
-      if (plugin !== "melt") {
+      if (plugin !== "octoprint_melt") {
         return;
       }
       if (data.msgpack_payload) {
@@ -24,7 +24,7 @@ $(function () {
     };
 
     self.fetchAnalytics = function() {
-        OctoPrint.get(OctoPrint.getBlueprintUrl("melt") + "analytics/metrics").done(function (r) {
+        OctoPrint.get(OctoPrint.getBlueprintUrl("octoprint_melt") + "analytics/metrics").done(function (r) {
             self.totalPrints(r.total_prints || 0);
             self.failedPrints(r.failed_prints || 0);
             self.printHours(((r.total_print_time_seconds || 0) / 3600).toFixed(1));
@@ -32,11 +32,11 @@ $(function () {
             self.bytesSent(((r.bytes_sent || 0) / 1048576).toFixed(2));
         });
 
-        OctoPrint.get(OctoPrint.getBlueprintUrl("melt") + "analytics/jobs").done(function (r) {
+        OctoPrint.get(OctoPrint.getBlueprintUrl("octoprint_melt") + "analytics/jobs").done(function (r) {
             self.recentJobs(r.jobs || []);
         });
 
-        OctoPrint.get(OctoPrint.getBlueprintUrl("melt") + "analytics/timeseries").done(function (r) {
+        OctoPrint.get(OctoPrint.getBlueprintUrl("octoprint_melt") + "analytics/timeseries").done(function (r) {
             if (self.telemetryChart && r.timeseries) {
                 var labels = [];
                 var hotend = [];
@@ -56,7 +56,7 @@ $(function () {
     };
 
     self.onStartupComplete = function () {
-      OctoPrint.get(OctoPrint.getBlueprintUrl("melt") + "telemetry")
+      OctoPrint.get(OctoPrint.getBlueprintUrl("octoprint_melt") + "telemetry")
         .done(function (response) {
           if (response.status === "ok") {
             self.statusText("Connected & Idle. Ready for high-throughput telemetry.");
