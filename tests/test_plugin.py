@@ -105,7 +105,7 @@ def test_toggle_plugin(mock_jsonify, plugin):
     """Test toggle REST API endpoint."""
     mock_jsonify.side_effect = lambda x: x
     
-    with app.test_request_context(json={}):
+    with app.test_request_context(json={"enabled": False}):
         # Disable
         plugin._plugin_manager.get_plugin_info.return_value.enabled = True
         resp = plugin.toggle_plugin("arc_welder")

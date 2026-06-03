@@ -412,6 +412,10 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
         data = flask.request.json or {}
         enabled = data.get("enabled", True)
         self._logger.info(f"Toggling {plugin_name} to {enabled}")
+        if enabled:
+            self._plugin_manager.enable_plugin(plugin_name)
+        else:
+            self._plugin_manager.disable_plugin(plugin_name)
         return jsonify({"status": "ok", "enabled": enabled})
 
     def is_blueprint_protected(self):
