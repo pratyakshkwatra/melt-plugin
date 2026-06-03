@@ -6,4 +6,4 @@ echo "Installing dependencies..."
 pip install --upgrade pip
 pip install pytest mock requests flask msgpack-python
 echo "Running PyTest Suite..."
-pytest tests/
+PYTHONPATH=. pytest tests/

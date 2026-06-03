@@ -1,12 +1,7 @@
 FROM octoprint/octoprint:latest
 
-# Install dependencies and required third-party plugins
-RUN /usr/local/bin/python -m pip install --upgrade pip && \
-    /usr/local/bin/python -m pip install \
-    "https://github.com/jneilliii/OctoPrint-BedLevelVisualizer/archive/master.zip" \
-    "https://github.com/paukstelis/OctoPrint-Cancelobject/archive/master.zip" \
-    "https://github.com/OllisGit/OctoPrint-SpoolManager/archive/master.zip" \
-    "https://github.com/eyal0/OctoPrint-PrintTimeGenius/archive/master.zip"
+# No longer pre-installing 3rd party plugins to avoid setuptools crash
+# They can be installed via the OctoPrint UI if needed.
 
 # Enable Virtual Printer by injecting basic config.yaml
 # The octoprint/octoprint image uses /octoprint/octoprint as the base directory.
