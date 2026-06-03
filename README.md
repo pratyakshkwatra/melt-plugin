@@ -48,17 +48,32 @@ Payloads are **MessagePack** encoded binaries, wrapped in standard OctoPrint JSO
 
 ---
 
-## 🛠️ Installation & Linting
+## 🛠️ Local Development & Linting
 
-Install via the Plugin Manager or manually:
-```bash
-pip install "https://github.com/pratyakshkwatra/melt-plugin/archive/main.zip"
-```
+To run local linting without installing the heavy `octoprint` core library:
 
-To run local linting (without the heavy `octoprint` requirement):
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install ruff black isort mypy flake8 msgpack-python
 ruff check . && black . && isort .
 ```
+
+## 🧪 Testing
+
+We enforce rigorous unit tests using `pytest` and `mock`. To run the Python unit tests locally:
+
+```bash
+# From the melt-plugin directory
+./test.sh
+```
+
+### 🐳 Dockerized OctoPrint Environment
+To test the plugin inside a real OctoPrint instance locally without flashing a Raspberry Pi, use our bundled Docker Compose setup:
+
+```bash
+cd testing
+# Boot up OctoPrint with Virtual Printer enabled and the local plugin mounted!
+docker-compose up --build
+```
+Once booted, access the local OctoPrint instance at `http://localhost:5000`.
