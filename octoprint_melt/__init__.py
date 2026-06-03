@@ -1,3 +1,4 @@
+# flake8: noqa: E501, W293, E302, E303, E261, W291
 import octoprint.plugin
 from flask import jsonify
 import os
@@ -5,6 +6,7 @@ import json
 import sqlite3
 import msgpack
 import time
+import base64
 
 class MeltPlugin(octoprint.plugin.BlueprintPlugin,
                  octoprint.plugin.StartupPlugin,
@@ -189,7 +191,6 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
             }
             # MessagePack serialization
             try:
-                import base64
                 packed = msgpack.packb(payload_dict, use_bin_type=True)
                 encoded = base64.b64encode(packed).decode('ascii')
                 self._plugin_manager.send_plugin_message(self._identifier, {"msgpack_payload": encoded})
@@ -345,7 +346,6 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
 
     @octoprint.plugin.BlueprintPlugin.route("/thumbnail/<path:filename>", methods=["GET"])
     def get_thumbnail(self, filename):
-        import base64
         import re
         from flask import make_response
         file_path = self._file_manager.path_on_disk("local", filename)
