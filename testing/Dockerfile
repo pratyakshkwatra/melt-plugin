@@ -8,12 +8,9 @@ RUN /usr/local/bin/python -m pip install \
     "https://github.com/eyal0/OctoPrint-PrintTimeGenius/archive/master.zip"
 
 # Enable Virtual Printer by injecting basic config.yaml
-# The octoprint/octoprint image uses /octoprint/octoprint as the base directory.
-RUN mkdir -p /octoprint/octoprint && \
-    echo 'plugins:\n  virtual_printer:\n    enabled: true\nprinterProfiles:\n  default: _default' > /octoprint/octoprint/config.yaml && \
-    chmod -R 777 /octoprint/octoprint
+RUN mkdir -p /octoprint && \
+    echo 'plugins:\n  virtual_printer:\n    enabled: true\nprinterProfiles:\n  default: _default' > /octoprint/config.yaml && \
+    chmod -R 777 /octoprint
 
 # Pre-create the plugin dev mount directory
 RUN mkdir -p /melt-plugin
-
-CMD ["octoprint", "serve", "--host=0.0.0.0", "--port=5000", "--basedir=/octoprint/octoprint"]
