@@ -15,6 +15,10 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
                  octoprint.plugin.SettingsPlugin,
                  octoprint.plugin.AssetPlugin):
 
+    def __init__(self):
+        self.active_clients = {}
+        self.total_bytes_sent = 0
+
     def on_after_startup(self):
         self._logger.info("Melt plugin started!")
         # Setup local data persistence using SQLite
@@ -193,6 +197,7 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
             # MessagePack serialization
             try:
                 packed = msgpack.packb(payload_dict, use_bin_type=True)
+                self.total_bytes_sent += len(packed)
                 encoded = base64.b64encode(packed).decode('ascii')
                 self._plugin_manager.send_plugin_message(self._identifier, {"msgpack_payload": encoded})
             except Exception as e:
@@ -251,7 +256,71 @@ class MeltPlugin(octoprint.plugin.BlueprintPlugin,
 
     @octoprint.plugin.BlueprintPlugin.route("/ping", methods=["GET"])
     def ping(self):
+        import flask
+        client_ip = flask.request.remote_addr
+        self.active_clients[client_ip] = time.time()
         return jsonify({"status": "ok", "plugin": "melt"})
+
+    @octoprint.plugin.BlueprintPlugin.route("/analytics/metrics", methods=["GET"])
+    def get_analytics_metrics(self):
+        # Clean up stale clients (no ping in 30 seconds)
+        now = time.time()
+        self.active_clients = {ip: t for ip, t in self.active_clients.items() if now - t < 30}
+        
+        metrics = {
+            "active_clients": len(self.active_clients),
+            "bytes_sent": self.total_bytes_sent
+        }
+        try:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT key, value FROM metrics")
+            for row in cursor.fetchall():
+                metrics[row[0]] = row[1]
+            conn.close()
+        except Exception:
+            pass
+        return jsonify(metrics)
+
+    @octoprint.plugin.BlueprintPlugin.route("/analytics/jobs", methods=["GET"])
+    def get_analytics_jobs(self):
+        jobs = []
+        try:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, filename, start_time, end_time, status FROM print_jobs ORDER BY id DESC LIMIT 10")
+            for row in cursor.fetchall():
+                jobs.append({
+                    "id": row[0],
+                    "filename": row[1],
+                    "start_time": row[2],
+                    "end_time": row[3],
+                    "status": row[4]
+                })
+            conn.close()
+        except Exception:
+            pass
+        return jsonify({"jobs": jobs})
+
+    @octoprint.plugin.BlueprintPlugin.route("/analytics/timeseries", methods=["GET"])
+    def get_analytics_timeseries(self):
+        timeseries = []
+        try:
+            conn = sqlite3.connect(self._db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT timestamp, hotend_temp, bed_temp, progress FROM telemetry_timeseries ORDER BY id DESC LIMIT 100")
+            for row in cursor.fetchall():
+                timeseries.append({
+                    "timestamp": row[0],
+                    "hotend_temp": row[1],
+                    "bed_temp": row[2],
+                    "progress": row[3]
+                })
+            conn.close()
+            timeseries.reverse()
+        except Exception:
+            pass
+        return jsonify({"timeseries": timeseries})
 
     @octoprint.plugin.BlueprintPlugin.route("/mesh", methods=["GET"])
     def get_bed_mesh(self):
