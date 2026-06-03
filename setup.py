@@ -9,9 +9,12 @@ setup(
     packages=["octoprint_melt"],
     include_package_data=True,
     zip_safe=False,
+    install_requires=[
+        "msgpack-python",
+    ],
     entry_points={
         "octoprint.plugin": [
-            "melt = octoprint_melt:MeltPlugin"
+            "melt = octoprint_melt"
         ]
     },
 )
